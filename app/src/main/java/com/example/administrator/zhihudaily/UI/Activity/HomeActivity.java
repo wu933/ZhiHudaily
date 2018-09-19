@@ -30,16 +30,15 @@ import java.util.Date;
 import cn.bingoogolapple.bgabanner.BGABanner;
 
 public class HomeActivity extends BaseActivity {
-    private RecyclerView mInfoList;//用于显示的列表
+    private RecyclerView mInfoList;//用于显示的列表,通过find activity中的id赋值
 
     private ArrayList<Item> mDatas;//用于储存数据
 
     private InfoListAdapter adapter;//适配器
 
-    private int otherdate=0;//从今日算起，倒数第几天 eg:昨天 就是1 前天就是 2
+    private int otherdate = 0;//从今日算起，倒数第几天 eg:昨天 就是1 前天就是 2
 
     private RequestQueue mQueue;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,26 +52,26 @@ public class HomeActivity extends BaseActivity {
     private void initView() {
 
         setTitle("首页", 1);
-        mInfoList= (RecyclerView) findViewById(R.id.infolist);
+        mInfoList = (RecyclerView) findViewById(R.id.infolist);
         mInfoList.setLayoutManager(new LinearLayoutManager(this));
-        adapter=new InfoListAdapter(mDatas,HomeActivity.this);
+        adapter = new InfoListAdapter(mDatas, HomeActivity.this);
         mInfoList.setAdapter(adapter);
-
+        
     }
 
-    private void  initDate(){
-        mDatas=new ArrayList<>();
+    private void initDate() {
+        mDatas = new ArrayList<>();
         getInfoFromNet();
     }
 
-    private void getInfoFromNet(){
+    private void getInfoFromNet() {
         //获取网络数据
         mQueue = Volley.newRequestQueue(this);
-        String url=null;
-        if (otherdate==0){
-            url="http://news-at.zhihu.com/api/4/news/latest";
-        }else {
-           url= "http://news.at.zhihu.com/api/4/news/before/" + getDate();
+        String url = null;
+        if (otherdate == 0) {
+            url = "http://news-at.zhihu.com/api/4/news/latest";
+        } else {
+            url = "http://news.at.zhihu.com/api/4/news/before/" + getDate();
         }
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -116,16 +115,15 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+    private String getDate() {
+        //获取当前需要加载的数据的日期
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DAY_OF_MONTH, -otherdate - 1);//otherdate天前的日子
 
-    private String getDate(){
-            //获取当前需要加载的数据的日期
-            Calendar c = Calendar.getInstance();
-            c.setTime(new Date());
-            c.add(Calendar.DAY_OF_MONTH, -otherdate-1);//otherdate天前的日子
-
-            String date = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
-            //将日期转化为20170520这样的格式
-            return date;
+        String date = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
+        //将日期转化为20170520这样的格式
+        return date;
 
     }
 
@@ -139,9 +137,9 @@ public class HomeActivity extends BaseActivity {
 
     private void initBanner() {
         //初始化banner
-        titles=new ArrayList<>();
-        ids=new ArrayList<>();
-        images=new ArrayList<>();
+        titles = new ArrayList<>();
+        ids = new ArrayList<>();
+        images = new ArrayList<>();
 
         bannerList = new ArrayList<>();
 
@@ -152,7 +150,7 @@ public class HomeActivity extends BaseActivity {
                 try {
                     //解析banner中的数据
                     JSONArray topinfos = response.getJSONArray("top_stories");
-                    Log.d("TAG", "onResponse: "+topinfos);
+                    Log.d("TAG", "onResponse: " + topinfos);
                     for (int i = 0; i < topinfos.length(); i++) {
                         JSONObject item = topinfos.getJSONObject(i);
                         Item item1 = new Item();
@@ -205,7 +203,7 @@ public class HomeActivity extends BaseActivity {
         banner.setDelegate(new BGABanner.Delegate() {
             @Override
             public void onBannerItemClick(BGABanner banner, View itemView, Object model, int position) {
-             //此处可设置banner子项的点击事件
+                //此处可设置banner子项的点击事件
 
             }
         });
