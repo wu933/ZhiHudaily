@@ -44,7 +44,7 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initDate();
+        initDate();//将其中的数据源mData通过api赋值
         initView();
         initBanner();
     }
@@ -54,9 +54,11 @@ public class HomeActivity extends BaseActivity {
         setTitle("首页", 1);
         mInfoList = (RecyclerView) findViewById(R.id.infolist);
         mInfoList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new InfoListAdapter(mDatas, HomeActivity.this);
+        adapter = new InfoListAdapter(mDatas, HomeActivity.this);//通过mData把数据源传递给adapter以用于后续加载
+
+        //显示列表加载适配器
         mInfoList.setAdapter(adapter);
-        
+
     }
 
     private void initDate() {
