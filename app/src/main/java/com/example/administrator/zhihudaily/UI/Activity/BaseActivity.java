@@ -14,20 +14,20 @@ import com.example.administrator.zhihudaily.R;
  * Created by Administrator on 2017/5/18 0018.
  */
 
-public class BaseActivity extends AppCompatActivity{
+public class BaseActivity extends AppCompatActivity {
     public Toolbar toolbar;
+
     /**
-     *
      * @param title 标题栏标题
      * @param type  标题类型，1为带菜单栏的标题栏，2为带back键的标题栏
      */
-    public void setTitle(String title,int type){
+    public void setTitle(String title, int type) {
 
-        toolbar= (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);//标题字体颜色
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
-        switch (type){
+        switch (type) {
             case 1:
                 toolbar.setNavigationIcon(R.drawable.menu);
                 break;
@@ -43,8 +43,9 @@ public class BaseActivity extends AppCompatActivity{
 
 
     }
-    public void showToast(String content){
-        Toast.makeText(this,content,Toast.LENGTH_SHORT).show();
+
+    public void showToast(String content) {
+        Toast.makeText(this, content, Toast.LENGTH_SHORT).show();
     }
 
 }
