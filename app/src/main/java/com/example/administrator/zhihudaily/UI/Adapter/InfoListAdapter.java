@@ -24,35 +24,62 @@ import java.util.ArrayList;
 public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.InfoViewHolder> {
     private ArrayList<Item> mData;//用于储存数据
     private Context mContext;//上下文
-    InfoViewHolder holder=null; //viewholde，可以提高recycleview的性能
+    InfoViewHolder holder = null; //viewholde，可以提高recycleview的性能
+
+    private onMyItemClickListener listener;
+
+    public void setOnMyItemListener(onMyItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface onMyItemClickListener {
+        void ClickItem(View v, int pos);
+
+        void LongClickItem(View v, int pos);
+    }
 
 
-
-
-    public  InfoListAdapter(ArrayList<Item> data,Context context) {
+    public InfoListAdapter(ArrayList<Item> data, Context context) {
 
         //构造方法，用于接收上下文和展示数据
 
         this.mData = data;
-        this.mContext=context;
+        this.mContext = context;
     }
 
     @Override
     public InfoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (headView!=null && viewType==TYPE_HEADER) return new InfoViewHolder(headView);
-        holder=new InfoViewHolder(LayoutInflater.from(mContext).inflate(R.layout.info_item,parent,false));
+        if (headView != null && viewType == TYPE_HEADER) return new InfoViewHolder(headView);
+        holder = new InfoViewHolder(LayoutInflater.from(mContext).inflate(R.layout.info_item, parent, false));
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(InfoViewHolder holder, int position) {
+    public void onBindViewHolder(InfoViewHolder holder, final int position) {
         //此方法内可以对布局中的控件进行操作
-        if (getItemViewType(position)==TYPE_HEADER) return;
-        final int pos=getRealPosition(holder);
+        if (getItemViewType(position) == TYPE_HEADER) return;
+        final int pos = getRealPosition(holder);
 
-        holder.title.setText(mData.get(pos).getTitle());//
+        holder.title.setText(mData.get(pos).getTitle());//设置标题栏内容
 
-        Glide.with(mContext).load(mData.get(pos).getImgurl()).into(holder.img);
+        Glide.with(mContext).load(mData.get(pos).getImgurl()).into(holder.img);//设置图片
+
+        if (listener != null) {
+            holder.title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.ClickItem(v, position);
+                }
+            });
+
+            holder.title.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listener.LongClickItem(v, position);
+                    return true;
+                }
+            });
+        }
     }
 
 
@@ -61,7 +88,7 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.InfoVi
 
         //获取数据长度
 
-        return headView==null? mData.size():mData.size()+1;
+        return headView == null ? mData.size() : mData.size() + 1;
     }
 
     class InfoViewHolder extends RecyclerView.ViewHolder {
@@ -76,35 +103,36 @@ public class InfoListAdapter extends RecyclerView.Adapter<InfoListAdapter.InfoVi
         public InfoViewHolder(View itemView) {
             super(itemView);
 
-            title= (TextView) itemView.findViewById(R.id.item_title);
-            img= (ImageView) itemView.findViewById(R.id.item_image);
-            headTitle= (TextView) itemView.findViewById(R.id.item_headtitle);
+            title = (TextView) itemView.findViewById(R.id.item_title);
+            img = (ImageView) itemView.findViewById(R.id.item_image);
+            headTitle = (TextView) itemView.findViewById(R.id.item_headtitle);
         }
     }
+
     public static final int TYPE_HEADER = 0;//显示headvuiew
     public static final int TYPE_NORMAL = 1;//显示普通的item
     private View headView;//这家伙就是Banner
 
-    public void setHeadView(View headView){
-        this.headView=headView;
+    public void setHeadView(View headView) {
+        this.headView = headView;
         notifyItemInserted(0);
     }
 
-    public View getHeadView(){
+    public View getHeadView() {
         return headView;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (headView==null)
+        if (headView == null)
             return TYPE_NORMAL;
-        if (position==0)
+        if (position == 0)
             return TYPE_HEADER;
         return TYPE_NORMAL;
     }
 
     private int getRealPosition(RecyclerView.ViewHolder holder) {
-        int position=holder.getLayoutPosition();
-        return headView==null? position:position-1;
+        int position = holder.getLayoutPosition();
+        return headView == null ? position : position - 1;
     }
 }

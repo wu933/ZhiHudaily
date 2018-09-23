@@ -59,6 +59,9 @@ public class HomeActivity extends BaseActivity {
         //显示列表加载适配器
         mInfoList.setAdapter(adapter);
 
+        //为recycleview mInfoList添加点击监听事件
+//        mInfoList.setOnClickListener();
+
     }
 
     private void initDate() {
