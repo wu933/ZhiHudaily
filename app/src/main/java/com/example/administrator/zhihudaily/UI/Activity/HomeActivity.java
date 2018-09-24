@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -59,8 +60,19 @@ public class HomeActivity extends BaseActivity {
         //显示列表加载适配器
         mInfoList.setAdapter(adapter);
 
-        //为recycleview mInfoList添加点击监听事件
-//        mInfoList.setOnClickListener();
+        //InfoListAdapter监听点击事件的具体实现
+        adapter.setOnMyItemListener(new InfoListAdapter.onMyItemClickListener() {
+            @Override
+            public void ClickItem(View v, int pos) {//位置参数是有holder参数自动获取并传入的
+                System.out.println("onClick---"+pos);
+            }
+
+            @Override
+            public void LongClickItem(View v, int pos) {
+                System.out.println("onLongClick---"+pos);
+            }
+        });
+
 
     }
 
