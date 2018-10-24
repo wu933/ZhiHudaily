@@ -1,5 +1,6 @@
 package com.example.administrator.zhihudaily.UI.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -63,12 +64,16 @@ public class HomeActivity extends BaseActivity {
         adapter.setOnMyItemListener(new InfoListAdapter.onMyItemClickListener() {
             @Override
             public void ClickItem(View v, int pos) {//位置参数是有holder参数自动获取并传入的
-                System.out.println("onClick---"+pos);
+                System.out.println("onClick---" + pos);
+
+                //Activity 间跳转，使用intent传递参数
+                Intent intent = new Intent(HomeActivity.this, NewsDetailActivity.class);
+                startActivity(intent);
             }
 
             @Override
             public void LongClickItem(View v, int pos) {
-                System.out.println("onLongClick---"+pos);
+                System.out.println("onLongClick---" + pos);
             }
         });
 
